@@ -5,7 +5,7 @@
   "license": "CC BY-NC-SA",
   "private": true,
   "scripts": {
-    "build": "npm run build",
+    "create:app": "npm run build",
     "lint": "eslint .",
     "start": "nodemon ./bin/www",
     "start:test": "PORT=3030 MONGODB_URL='mongodb://0.0.0.0/acebook_test' npm start",
