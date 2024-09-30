@@ -14,7 +14,7 @@ It uses:
 
 ## Card wall
 
-REPLACE THIS TEXT WITH A LINK TO YOUR CARD WALL
+[Card wall](https://trello.com/b/48NidCEA/cloudspotter-catherine-acebook)
 
 ## Quickstart
 
