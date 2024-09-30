@@ -28,4 +28,3 @@ jobs:
     - name: Cypress run
     - run: npm run build
     - run: npm run test:integration
-          
