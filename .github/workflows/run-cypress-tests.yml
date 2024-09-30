@@ -3,16 +3,32 @@ on: [push]
 jobs:
   cypress-run:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x] # Removed newer versions on assumption we'll just use version from repo
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        mongodb-version: ['6.0']
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - uses: actions/checkout@v4
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.11.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
 
-      - run: npm install
-      - run: npm ci
+    - run: npm install
+    - run: npm ci
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          create: npm run build
-          test: npm run test:integration
+    - name: Cypress install
+    - run: npm install cypress
+
+    - name: Cypress run
+    - run: npm run build
+    - run: npm run test:integration
           
