@@ -1,0 +1,76 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci: # Run linter and run tests (Jest and Cypress)
+    runs-on: ubuntu-latest
+
+      strategy:
+        matrix:
+          node-version: [18.x] # Removed newer versions on assumption we'll just use version from repo
+          # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+          mongodb-version: ['6.0']
+
+      steps:
+      - uses: actions/checkout@v4 # checkout fetches the repo code into workflow env
+      
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.11.0
+        with:
+          mongodb-version: ${{ matrix.mongodb-version }}
+      # - run: npm install   https://stackoverflow.com/questions/52499617/what-is-the-difference-between-npm-install-and-npm-ci
+      - run: npm ci 
+      # - run: npm run build --if-present  # We didn't have a build section - leave out?
+      - run: npm run lint
+      - run: npm run test:unit
+      
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        with:
+            start: npm run start:test
+            wait-on: http://localhost:3030
+
+jobs:
+  cd:
+    # Only run after ci job completes successfully
+    needs: ci  # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.11.0
+      with:
+        mongodb-version: ${{ matrix.mongodb-version }}
+
+      - name: Install dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+
+      - name: Set AWS credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }} # Need to be set up in GitHub > Settings > Secrets and variables > Actions > new repo secret > add new secret with name referenced here
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-2
+
+      - name: Copy files to S3 with the AWS CLI
+        run: |
+          aws s3 sync ./out s3://catherine-cloudspotter-acebook
