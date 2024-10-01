@@ -79,4 +79,4 @@ jobs:
 
       - name: Copy files to S3 with the AWS CLI
         run: |
-          aws s3 sync ./out s3://catherine-cloudspotter-acebook
+          aws s3 sync ./ s3://catherine-cloudspotter-acebook
