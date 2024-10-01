@@ -77,6 +77,20 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: eu-west-2
 
-      - name: Copy files to S3 with the AWS CLI
+      # - name: Copy files to S3 with the AWS CLI
+      #   run: |
+      #     aws s3 sync ./out s3://catherine-cloudspotter-acebook
+
+      - name: Copy files to S3 with AWS CLI # 2nd way
         run: |
-          aws s3 sync ./ s3://catherine-cloudspotter-acebook --delete
+          aws deploy push \
+            --application-name catherine-cloudspotter-acebook \
+            --s3-location s3://catherine-cloudspotter-acebook.zip \
+            --source .
+
+      - name: S3 to Ec2 
+        run: |
+          aws deploy create-deployment \
+            --application-name catherine-cloudspotter-acebook \ 
+            --deployment-group-name catherine-cloudspotter-acebook-deployment-group \ 
+            --s3-location bucket=catherine-cloudspotter-acebook,key=catherine-cloudspotter-acebook.zip,bundleType=zip
