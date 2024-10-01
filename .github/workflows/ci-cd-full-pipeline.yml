@@ -46,6 +46,12 @@ jobs:
     needs: ci  # https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#jobsjob_idneeds
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [18.x] # Removed newer versions on assumption we'll just use version from repo
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+        mongodb-version: ['6.0']
+
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js ${{ matrix.node-version }}
