@@ -29,7 +29,7 @@ jobs:
       uses: supercharge/mongodb-github-action@1.11.0
       with:
         mongodb-version: ${{ matrix.mongodb-version }}
-    # - run: npm install   https://stackoverflow.com/questions/52499617/what-is-the-difference-between-npm-install-and-npm-ci
+    - run: npm install   
     - run: npm ci 
     # - run: npm run build --if-present  # We didn't have a build section - leave out?
     - run: npm run lint
