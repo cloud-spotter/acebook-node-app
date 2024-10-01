@@ -85,7 +85,7 @@ jobs:
         run: |
           aws deploy push \
             --application-name catherine-cloudspotter-acebook \
-            --s3-location s3://catherine-cloudspotter-acebook.zip \
+            --s3-location s3://catherine-cloudspotter-acebook/catherine-cloudspotter-acebook.zip \
             --source .
 
       - name: S3 to Ec2 
