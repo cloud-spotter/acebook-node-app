@@ -1,0 +1,95 @@
+# For help completing this file, see the "AppSpec File Reference" in the  
+#   "CodeDeploy User Guide" at
+#   https://docs.aws.amazon.com/codedeploy/latest/userguide/app-spec-ref.html
+version: 0.0
+os: linux 
+
+files:
+  - source: / # Copy all files from the application revision to the instance (paths are relative to revision root)
+    destination: /home/ec2-user/acebook-node-app
+
+# Amazon Linux: option to specify a 'permissions' section for any special permissions
+# applicable to the above files as they're being copied over to the instance 
+
+
+# If you are not running any commands on the Amazon EC2 instance, then remove 
+#   the "hooks" section altogether. A blank or incomplete "hooks" section
+#   may cause associated deployments to fail.
+hooks:
+# For each deployment lifecycle event, specify multiple "location" entries 
+#   if you want to run multiple scripts during that event.
+# You can specify "timeout" as the number of seconds to wait until failing the deployment 
+#   if the specified scripts do not run within the specified time limit for the 
+#   specified event. For example, 900 seconds is 15 minutes. If not specified, 
+#   the default is 1800 seconds (30 minutes).
+#   Note that the maximum amount of time that all scripts must finish executing 
+#   for each individual deployment lifecycle event is 3600 seconds (1 hour). 
+#   Otherwise, the deployment will stop and CodeDeploy will consider the deployment
+#   to have failed to the Amazon EC2 instance. Make sure that the total number of seconds 
+#   that are specified in "timeout" for all scripts in each individual deployment 
+#   lifecycle event does not exceed a combined 3600 seconds (1 hour).
+# For deployments to Amazon Linux, Ubuntu Server, or RHEL instances,
+#   you can specify "runas" in an event to
+#   run as the specified user. For more information, see the documentation.
+#   If you are deploying to Windows Server instances,
+#   remove "runas" altogether.
+# If you do not want to run any commands during a particular deployment
+#   lifecycle event, remove that event declaration altogether. Blank or 
+#   incomplete event declarations may cause associated deployments to fail.
+# During the ApplicationStop deployment lifecycle event, run the commands 
+#   in the script specified in "location" starting from the root of the 
+#   revision's file bundle.
+
+# TODO: figure out bash commands to stop application (as in acebook, not the CodeDeploy application in AWS)
+  # ApplicationStop:
+  #   - location: 
+  #     timeout: 120
+  #     runas: ec2-user
+
+# Page link has another hook called DownloadBundle which sounds relevant for our setup:
+# https://docs.aws.amazon.com/codedeploy/latest/userguide/reference-appspec-file-structure-hooks.html#reference-appspec-file-structure-hooks-availability
+
+# During the BeforeInstall deployment lifecycle event, run the commands 
+#   in the script specified in "location".
+  BeforeInstall:
+    - location: |
+        #!/bin/bash
+        if [ -d /home/ec2-user/acebook-node-app ]; then
+          rm -rf /home/ec2-user/acebook-node-app/*
+        else
+          mkdir -p /home/ec2-user/acebook-node-app
+        fi
+      timeout: 120
+      runas: ec2-user
+
+# During the AfterInstall deployment lifecycle event, run the commands 
+#   in the script specified in "location".
+  AfterInstall:
+    - location: |
+        #!/bin/bash
+        cd /home/ec2-user/acebook-node-app
+        npm install     
+      timeout: 300 # TODO: check what an appropriate time to allow for this would be
+      runas: ec2-user
+
+# During the ApplicationStart deployment lifecycle event, run the commands 
+#   in the script specified in "location".
+  ApplicationStart:
+    - location: |
+        #!/bin/bash
+        cd /home/ec2-user/acebook-node-app
+        npm start
+      timeout: 120 
+      runas: ec2-user
+
+# During the ValidateService deployment lifecycle event, run the commands 
+#   in the script specified in "location".
+
+# I think implementing a 'check the application is running' script would be good here but need to read more on this section
+  # ValidateService:
+  #   - location:     
+  #     timeout: 
+  #     runas: ec2-user
+  #   - location: 
+  #     timeout:
+  #     runas: ec2-user
