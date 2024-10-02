@@ -79,18 +79,18 @@ jobs:
 
       # - name: Copy files to S3 with the AWS CLI
       #   run: |
-      #     aws s3 sync ./out s3://catherine-cloudspotter-acebook
+      #     aws s3 sync ./out s3://cloudspotter-acebook-deployment
 
       - name: Copy files to S3 with AWS CLI # 2nd way
         run: |
           aws deploy push \
             --application-name catherine-cloudspotter-acebook \
-            --s3-location s3://catherine-cloudspotter-acebook/catherine-cloudspotter-acebook.zip \
+            --s3-location s3://cloudspotter-acebook-deployment/cloudspotter-acebook-deployment.zip \
             --source .
 
-      - name: S3 to Ec2 
+      - name: S3 to EC2 
         run: |
           aws deploy create-deployment \
-            --application-name catherine-cloudspotter-acebook \ 
+            --application-name cloudspotter-acebook \ 
             --deployment-group-name catherine-cloudspotter-acebook-deployment-group \ 
-            --s3-location bucket=catherine-cloudspotter-acebook,key=catherine-cloudspotter-acebook.zip,bundleType=zip
+            --s3-location bucket=cloudspotter-acebook-deployment,key=cloudspotter-acebook-deployment.zip,bundleType=zip
