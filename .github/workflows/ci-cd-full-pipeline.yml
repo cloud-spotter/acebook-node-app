@@ -91,6 +91,6 @@ jobs:
       - name: S3 to EC2 
         run: |
           aws deploy create-deployment \
-            --application-name cloudspotter-acebook \ 
-            --deployment-group-name cloudspotter-acebook-deployment-group \ 
+            --application-name cloudspotter-acebook \
+            --deployment-group-name cloudspotter-acebook-deployment-group \
             --s3-location bucket=cloudspotter-acebook-deployment,key=cloudspotter-acebook-deployment.zip,bundleType=zip
