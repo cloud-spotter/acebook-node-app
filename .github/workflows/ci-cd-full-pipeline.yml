@@ -84,7 +84,7 @@ jobs:
       - name: Copy files to S3 with AWS CLI # 2nd way
         run: |
           aws deploy push \
-            --application-name catherine-cloudspotter-acebook \
+            --application-name cloudspotter-acebook \
             --s3-location s3://cloudspotter-acebook-deployment/cloudspotter-acebook-deployment.zip \
             --source .
 
@@ -92,5 +92,5 @@ jobs:
         run: |
           aws deploy create-deployment \
             --application-name cloudspotter-acebook \ 
-            --deployment-group-name catherine-cloudspotter-acebook-deployment-group \ 
+            --deployment-group-name cloudspotter-acebook-deployment-group \ 
             --s3-location bucket=cloudspotter-acebook-deployment,key=cloudspotter-acebook-deployment.zip,bundleType=zip
