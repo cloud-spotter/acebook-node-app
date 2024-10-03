@@ -6,3 +6,9 @@ os: linux
 files:
   - source: /  # Copy all files and directories from the root of the application bundle
     destination: /home/ec2-user/acebook-node-app  # Target location for the copied files
+
+hooks:
+  ApplicationStart:
+    - location: scripts/start_application.sh
+      timeout: 120
+      runas: ec2-user
