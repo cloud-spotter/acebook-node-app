@@ -19,11 +19,11 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Install Node.js version 18 (newer versions cause a GLIBC version conflict)
-echo "Installing Node.js version 18..."
-nvm install 18
+echo "Installing Node.js version 16..."
+nvm install 168
 
 # Use the installed version
-nvm use 18
+nvm use 16
 
 echo "Node.js installed successfully. Version: $(node -v)"
 echo "npm version: $(npm -v)"

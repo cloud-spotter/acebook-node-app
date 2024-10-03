@@ -11,7 +11,7 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # Use Node.js 18
-nvm use 18
+nvm use 16
 
 cd /home/ec2-user/acebook-node-app
 echo "Changed to application directory"
