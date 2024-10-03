@@ -1,0 +1,8 @@
+version: 0.0
+# EC2 instance operating system
+os: linux
+
+# Defines how files should be copied from the source location to the target (EC2 instance here)
+files:
+  - source: /  # Copy all files and directories from the root of the application bundle
+    destination: /home/ec2-user/acebook-node-app  # Target location for the copied files
