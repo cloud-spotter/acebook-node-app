@@ -4,10 +4,25 @@
 exec > >(tee -a /home/ec2-user/deploy_log.txt)
 
 echo "Starting application deployment process..."
+
+# Load nvm
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+
+# Use Node.js 18
+nvm use 18
+
 cd /home/ec2-user/acebook-node-app
 echo "Changed to application directory"
+
+echo "Node.js version: $(node -v)"
+echo "npm version: $(npm -v)"
+
+echo "Installing dependencies..."
 npm install
 echo "Finished npm install"
+
 echo "Starting application..."
 # Starts the Node.js application in production mode
 npm run start:production > app.log 2>&1 &
