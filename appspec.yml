@@ -7,6 +7,14 @@ files:
   - source: /  # Copy all files and directories from the root of the application bundle
     destination: /home/ec2-user/acebook-node-app  # Target location for the copied files
 
+# Set file permissions for scripts
+# mode 755: Owner can read/write/execute, others can read/execute
+permissions:
+  - object: /home/ec2-user/acebook-node-app/scripts/start_application.sh
+    mode: 755
+    owner: ec2-user
+    group: ec2-user
+
 hooks:
   ApplicationStart:
     - location: scripts/start_application.sh
