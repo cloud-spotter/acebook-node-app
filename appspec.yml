@@ -16,6 +16,11 @@ permissions:
     group: ec2-user
 
 hooks:
+  BeforeInstall:
+    - location: scripts/install_nodejs.sh
+      timeout: 300
+      runas: ec2-user
+
   ApplicationStart:
     - location: scripts/start_application.sh
       timeout: 120
