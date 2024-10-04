@@ -3,6 +3,15 @@
 # Redirect all output to a log file
 exec > >(tee -a /home/ec2-user/nodejs_install_log.txt) 2>&1
 
+echo "Checking for existing Node.js installation..."
+if command -v node &> /dev/null && command -v npm &> /dev/null
+then
+    echo "Node.js and npm are already installed:"
+    node --version
+    npm --version
+    exit 0
+fi
+
 # Installation steps here: https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/setting-up-node-on-ec2-instance.html
 # Install nvm
 echo "Installing nvm..."
@@ -23,7 +32,10 @@ echo "Installing Node.js version 16..."
 nvm install 16
 
 # Use the installed version
-nvm use 16
+nvm use 16.20.2
+
+# Set as default
+nvm alias default 16.20.2
 
 echo "Node.js installed successfully. Version: $(node -v)"
 echo "npm version: $(npm -v)"
