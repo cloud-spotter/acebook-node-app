@@ -10,17 +10,17 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Use Node.js 16
-nvm use 16
+# Use specific Node.js version
+nvm use 16.20.2
 
-cd /home/ec2-user/acebook-node-app
+cd /home/ec2-user/acebook-node-app || { echo "Failed to change directory. Exiting."; exit 1; }
 echo "Changed to application directory"
 
 echo "Node.js version: $(node -v)"
 echo "npm version: $(npm -v)"
 
 echo "Installing dependencies..."
-npm install
+npm ci
 echo "Finished npm install"
 
 echo "Starting application..."
